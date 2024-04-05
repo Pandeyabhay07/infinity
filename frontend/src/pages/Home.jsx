@@ -14,10 +14,13 @@ const Home = () => {
   const fetchBook = async () => {
     try {
       setLoading(true);
-      const resp = await axios.get(`${SERVER_URL}/book`);
-      setBooks(resp.data.data);
+      const resp = await fetch("http://localhost:3000/weapon");
+      const result=await resp.json();
+      console.log(result);
+    
+      setBooks(result.data);
       setLoading(false);
-      console.log(resp.data);
+      // console.log(resp.data);
     } catch (error) {
       setLoading(false);
       console.log(error);
