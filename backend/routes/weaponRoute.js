@@ -10,7 +10,7 @@ weaponRoute.get("/weapon", async (req, res) => {
     try {
         const weapon = await Weapon.find();
         if (!weapon)
-            return res.json({ msg: "weapon not found" });
+            return res.json({ msg: "Sorry the desired weapon not found" });
         res.status(StatusCodes.OK).json({ count: weapon.length, data: weapon });
         // res.json("working");
     }
@@ -21,17 +21,17 @@ weaponRoute.get("/weapon", async (req, res) => {
 // tested
 weaponRoute.post("/weapon", async (req, res) => {
     try {
-        const { title, author, year } = req.body;
-        if (!title || !author || !year) {
+        const { name, quantity, manuDate, type,lastUpdate,receivedDate,features,sender} = req.body;
+        if (!name || !quantity || !manuDate ||!type||!type||!lastUpdate||!receivedDate||!features||!sender) {
             return res
                 .status(StatusCodes.BAD_REQUEST)
                 .json({ msg: "Please provide all fields" });
         }
         await Weapon.create(req.body);
-        res.status(StatusCodes.CREATED).json({ msg: "weapon Added", data: req.body });
+        res.status(StatusCodes.CREATED).json({ msg: "Weapon Added", data: req.body });
         // req.json({ msg: "Book Added" });
     }
-    catch (error) {
+    catch (error){
         console.log(error);
     }
 })
@@ -46,12 +46,12 @@ weaponRoute.get("/weapon/:id", async (req, res) => {
                 .status(statusCodes.NOT_FOUND)
                 .json({ msg: `Weapon with ${id} not found` });
         }
-        res.status(statusCodes.OK).json({ msg: "weapon found", weapon });
+        res.status(statusCodes.OK).json({ msg: "Weapon found", weapon });
     }
     catch (error) {
         res
             .status(StatusCodes.NOT_FOUND)
-            .json({ msg: `weapon with ${id} not found` });
+            .json({ msg: `Weapon with ${id} not found` });
     }
 })
 
@@ -61,8 +61,8 @@ weaponRoute.delete("/weapon/:id", async(req, res) => {
 
     const { id } = req.params;
     try {
-        const book = await Weapon.findByIdAndDelete(id);
-        if (!book) {
+        const weapon = await Weapon.findByIdAndDelete(id);
+        if (!weapon) {
             res
                 .status(statusCodes.NOT_FOUND)
                 .json({ msg: `Weapon with ${id} not found` });
@@ -71,28 +71,28 @@ weaponRoute.delete("/weapon/:id", async(req, res) => {
     catch (error) {
         res
             .status(StatusCodes.NOT_FOUND)
-            .json({ msg: `Book with ${id} not found` });
+            .json({ msg: `Weapon with ${id} not found` });
     }
-    res.send("Delete weapon");
+    res.send("Weapon Deleted");
 })
 
 // tested
 weaponRoute.put("/weapon/:id", async(req, res) => {
     const { id } = req.params;
-    const {title, author, year} = req.body;
+    const { name, quantity, manuDate, type,lastUpdate,receivedDate,features,sender} = req.body;
     try {
-        if (!title || !author || !year) {
+        if (!name || !quantity || !manuDate ||!type||!type||!lastUpdate||!receivedDate||!features||!sender) {
             return res
                 .status(statusCodes.NOT_FOUND)
-                .json({ msg: "Please Provide All Data"});
+                .json({ msg: "Please provide all the fields."});
         }
         const result = await Weapon.findByIdAndUpdate(id, req.body);
         if(!result){
             return res 
                     .status(statusCodes.BAD_REQUEST)
-                    .json({msg: "weapon not found"});
+                    .json({msg: "Weapon not found"});
         }
-        return res.status(statusCodes.OK).json({msg: "weapon update", result});
+        return res.status(statusCodes.OK).json({msg: "Weapon updated", result});
     }
     catch (error) {
         res
